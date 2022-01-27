@@ -3,7 +3,8 @@ var body = document.body;
 var contEl = document.createElement("div");
 var startbtn = document.createElement("button");
 var h1El = document.createElement("h1");
-var ulEl = document.createElement("ul")
+var ulEl = document.createElement("ul");
+
 
 h1El.textContent = "Code Quiz";
 startbtn.textContent = "startbutton";
@@ -23,12 +24,12 @@ var a4 = document.createElement("button");
 //effects of startbutton
 startbtn.addEventListener("click", function () {
   console.log("starbutton done got clicked");
-  countdown();
+   countdown();
   contEl.removeChild(startbtn);
-   ulEl.appendChild(a1);
-   ulEl.appendChild(a2);
-   ulEl.appendChild(a3);
-   ulEl.appendChild(a4);
+  ulEl.appendChild(a1);
+  ulEl.appendChild(a2);
+  ulEl.appendChild(a3);
+  ulEl.appendChild(a4);
   return getquestionfunc();
 })
 
@@ -66,55 +67,60 @@ var questions = [{
 }]
 
 var i = 0;
-function getquestionfunc() {  
-  if (i<questions.length){
+function getquestionfunc() {
+  if (i < questions.length) {
     //this progresses as q1, q2, q4, q6. why? ANSWER: needed stopPropogation after eventlistener
-  h1El.textContent= questions[i].title[0];
-  a1.textContent = questions[i].choices[0];
-  a2.textContent = questions[i].choices[1];
-  a3.textContent = questions[i].choices[2];
-  a4.textContent = questions[i].choices[3];
-  console.log(questions[i]);
-}
-ulEl.addEventListener("click", function(event){
-  //event.stopImmediatePropagation();  
-  //console.log("target button ", event.target.textContent);
-  if (event.target.textContent === questions[i].answer[0]){
-    console.log("correct")
-    //draw correct or incorrect onto page and decrement time when incorrect
+    h1El.textContent = questions[i].title[0];
+    a1.textContent = questions[i].choices[0];
+    a2.textContent = questions[i].choices[1];
+    a3.textContent = questions[i].choices[2];
+    a4.textContent = questions[i].choices[3];
+    console.log(questions[i]);
   }
-  
-  i++;
-      return getquestionfunc();
-      //if i=6 return scorescreen
+  ulEl.addEventListener("click", function (event) {
+    event.stopImmediatePropagation();
+    //console.log("target button ", event.target.textContent);
+    if (event.target.textContent === questions[i].answer[0]) {
+      var notif = document.createElement("h2");
+      contEl.appendChild(notif);
+      notif.textContent = ("CORRECT!")
+      setTimeout(correctout);
+      var correctout = setTimeout(function dissapear() {
+        contEl.removeChild(notif);
+      }, 750);
+    }
+    else {
+      var notif = document.createElement("h2");
+      contEl.appendChild(notif);
+      notif.textContent = ("INCORRECT!")
+      setTimeout(incorrectout);
+      var incorrectout = setTimeout(function dissapear() {
+        contEl.removeChild(notif);
+      }, 750);
+      timerEl.textContent = "Ye olde seconds remaining: " + timeLeft-10;
+    }
+    //draw incorrect onto page and decrement time when incorrect
+    i++;
+    return getquestionfunc();
+    //if i=6 return scorescreen
   })
 }
-//possibly make an array that equals true globally, make the values of correct answers equal the indices of the correct array
-// var trueSet = ["milk", "beer", "frodo", "ate", "pow", "bovine"];
 
-// //how do i indicate the mouseclicking is selecting the trueset in this if statement
-// var correct = function (event, index) {
-//   console.log(event.target);
-//   if (event.target.innerText === trueSet[index])
-//     console.log("correct")
-//   else console.log("incorrect")
-// }
+
+
 
 //timer function not tied to high score at this time
-var timerEl = document.getElementById("timer");
-
-function countdown() {
-  console.log("timer started");
-  var timeLeft = 15;
-
-  var timeInterval = setInterval(function () {
-    timerEl.textContent = "Ye olde seconds remaining: " + timeLeft;
-
-    if (timeLeft === -1) {
-      clearInterval(timeInterval);
-      timerEl.remove();
-    }
-    timeLeft--;
-  }, 1000);
-}
+ var timerEl = document.getElementById("timer");
+ function countdown() {
+   console.log("timer started");
+   var timeLeft = 60;
+   var timeInterval = setInterval(function () {
+     timerEl.textContent = "Ye olde seconds remaining: " + timeLeft;
+     if (timeLeft === -1) {
+       clearInterval(timeInterval);
+       timerEl.remove();
+     }
+     timeLeft--;
+   }, 1000);
+ }
   //end timer function
