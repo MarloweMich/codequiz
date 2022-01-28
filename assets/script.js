@@ -65,13 +65,10 @@ var questions = [{
   choices: ["A", "Y", "D", "C"],
   answer: ["D"]
 }]
-
+var correct = [];
+var incorrect = [];
 var i = 0;
 function getquestionfunc() {
-  // function scorescreen(){
-  //   h1El.textContent = "SCOREBOARD";
-  //   contEl.removeChild(ulEl);
-  // }
   countdown();
   var timerEl = document.getElementById("timer");
   function countdown() {
@@ -102,11 +99,11 @@ function getquestionfunc() {
     }
     ulEl.addEventListener("click", function (event) {
       event.stopImmediatePropagation();
-      //console.log("target button ", event.target.textContent);
       if (event.target.textContent === questions[i].answer[0]) {
         var notif = document.createElement("h2");
         contEl.appendChild(notif);
-        notif.textContent = ("CORRECT!")
+        notif.textContent = ("CORRECT!");
+        correct.push("correct");
         setTimeout(correctout);
         var correctout = setTimeout(function dissapear() {
           contEl.removeChild(notif);
@@ -115,7 +112,8 @@ function getquestionfunc() {
       else {
         var notif = document.createElement("h2");
         contEl.appendChild(notif);
-        notif.textContent = ("INCORRECT!")
+        notif.textContent = ("INCORRECT!");
+        incorrect.push("incorrect");
         setTimeout(incorrectout);
         var incorrectout = setTimeout(function dissapear() {
           contEl.removeChild(notif);
@@ -127,40 +125,21 @@ function getquestionfunc() {
       //draw incorrect onto page and decrement time when incorrect
       i++;
       if (i === 6) {
-        h1El.textContent = "SCOREBOARD";
         contEl.removeChild(ulEl);
+        h1El.textContent = "SCOREBOARD";
+        var wins = document.createElement("h2");
+        var losses = document.createElement("h2");
+        contEl.appendChild(wins);
+        contEl.appendChild(losses);
+        wins.textContent = "Correct: " + correct.length;
+        losses.textContent = "Incorrect: " + incorrect.length;
       }
       if (i < 6) {
         return questionlist();
       }
-
-      //if i=6 return scorescreen
     })
   }
-
 }
 
-//timer function not tied to high score at this time
-// var timerEl = document.getElementById("timer");
-// function countdown() {
-//   console.log("timer started");
-//   var timeLeft = 60;
-//   var timeInterval = setInterval(function() {
-//      timerEl.textContent = "Ye olde seconds remaining: " + timeLeft;
-//     // if (decten()){
-//     //  timerEl.textContent = "Ye olde seconds remaining: " + timeLeft - window.value;
-//     // }
-//     if (timeLeft === -1) {
-//       clearInterval(timeInterval);
-//       timerEl.remove();
-//     }
-//     timeLeft--;
-//   }, 1000);
-//   questionlist();
-// }
-//end timer function
 
-//function decten() {
- // window.value = 10;
-//}
 
